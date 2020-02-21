@@ -33,14 +33,14 @@ jobs:
 
       - name: Build image
         if: success()
-        run: docker build --file Dockerfile --tag brettmillerb/sqlpackage:latest .
+        run: docker build --file Dockerfile --tag millerbacr.azurecr.io/sqlpackage:latest .
 
       - name: Test Docker Image
         if: success()
-        run: docker run --rm brettmillerb/sqlpackage:latest sqlpackage /help
+        run: docker run --rm millerbacr.azurecr.io/sqlpackage:latest sqlpackage /help
 
       - name: Push to Docker registry
         if: success()
         uses: actions-hub/docker@master
         with:
-          args: push brettmillerb/sqlpackage:latest
+          args: push millerbacr.azurecr.io/sqlpackage:latest
