@@ -1,0 +1,46 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: 
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+      
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+          creds: ${{secret.AZURE_CREDENTIAL}}
+      
+      - name: Docker Login
+        if: success()
+        uses: Azure/docker-login@v1
+        with:
+          username: ${{secret.ACRUSERNAME}}
+          password: ${{secret.ACRPASSWORD}}
+          login-server: ${{secret.ACRURI}}
+     
+      - name: Build image
+        if: success()
+        run: docker build --file Dockerfile --tag brettmillerb/sqlpackage:latest .
+        
+      - name: Test Docker Image
+        if: success()
+        run: docker run --rm brettmillerb/sqlpackage:latest node --version
+      
+      - name: Push to Docker registry
+        if: success()
+        uses: actions-hub/docker@master
+        with:
+          args: push brettmillerb/sqlpackage:latest
