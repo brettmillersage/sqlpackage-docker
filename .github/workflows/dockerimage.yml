@@ -37,7 +37,7 @@ jobs:
 
       - name: Test Docker Image
         if: success()
-        run: docker run --rm brettmillerb/sqlpackage:latest node --version
+        run: docker run --rm brettmillerb/sqlpackage:latest sqlpackage /help
 
       - name: Push to Docker registry
         if: success()
