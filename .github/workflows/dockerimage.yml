@@ -18,11 +18,7 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Login to github registry
-        uses: actions-hub/docker/login@master
-        env:
-          DOCKER_USERNAME: ${{ secrets.ACRUSERNAME2 }}
-          DOCKER_PASSWORD: ${{ secrets.ACRPASSWORD2 }}
-          DOCKER_REGISTRY_URL: millerbacr.azurecr.io
+        run: docker login --username {{secrets.ACRUSERNAME2}} --password {{secrets.ACRPASSWORD2}}
 
       - name: Build image
         if: success()
