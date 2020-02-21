@@ -23,24 +23,24 @@ jobs:
           # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
           creds: ${{secrets.AZURE_CREDENTIAL}}
 
-#       - name: Docker Login
-#         if: success()
-#         uses: Azure/docker-login@v1
-#         with:
-#           username: ${{secrets.ACRUSERNAME}}
-#           password: ${{secrets.ACRPASSWORD}}
-#           login-server: ${{secrets.ACRURI}}
+      - name: Docker Login
+        if: success()
+        uses: Azure/docker-login@v1
+        with:
+          username: ${{secrets.ACRUSERNAME2}}
+          password: ${{secrets.ACRPASSWORD2}}
+          login-server: millerbacr.azurecr.io
 
       - name: Build image
         if: success()
-        run: docker build --file Dockerfile --tag millerbacr/sqlpackage:latest .
+        run: docker build --file Dockerfile --tag millerbacr.azurecr.io/sqlpackage:latest .
 
       - name: Test Docker Image
         if: success()
-        run: docker run --rm millerbacr/sqlpackage:latest sqlpackage /help
+        run: docker run --rm millerbacr.azurecr.io/sqlpackage:latest sqlpackage /help
 
       - name: Push to Docker registry
         if: success()
         uses: actions-hub/docker@master
         with:
-          args: push millerbacr/sqlpackage:latest
+          args: push millerbacr.azurecr.io/sqlpackage:latest
