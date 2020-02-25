@@ -18,16 +18,16 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Login to github registry
-        run: docker login --username ${{secrets.ACRUSERNAME2}} --password ${{secrets.ACRPASSWORD2}} millerbacr.azurecr.io
+        run: docker login --username ${{secrets.ACRUSERNAME}} --password ${{secrets.ACRPASSWORD}} ${{ACRSERVER}}
 
       - name: Build image
         if: success()
-        run: docker build --file Dockerfile --tag millerbacr.azurecr.io/sqlpackage:latest .
+        run: docker build --file Dockerfile --tag ${{ACRSERVER}}/sqlpackage:latest .
 
       - name: Test Docker Image
         if: success()
-        run: docker run --rm millerbacr.azurecr.io/sqlpackage:latest sqlpackage /help
+        run: docker run --rm ${{ACRSERVER}}/sqlpackage:latest sqlpackage /help
       
       - name: Push Docker Image
         if: success()
-        run: docker push millerbacr.azurecr.io/sqlpackage:latest
+        run: docker push ${{ACRSERVER}}/sqlpackage:latest
